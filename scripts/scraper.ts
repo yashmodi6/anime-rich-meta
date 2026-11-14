@@ -65,7 +65,11 @@ const insertStmt = db.prepare(`
 
 const formatDate = (s?: AniListMedia['startDate']): string | null => {
   if (!s?.year) return null;
-  const parts = [s.year, s.month?.toString().padStart(2, '0'), s.day?.toString().padStart(2, '0')].filter(Boolean);
+  const parts = [
+    s.year,
+    s.month?.toString().padStart(2, '0'),
+    s.day?.toString().padStart(2, '0'),
+  ].filter(Boolean);
   return parts.join('-');
 };
 
@@ -88,7 +92,7 @@ function saveBatch(items: AniListMedia[]) {
         m.format ?? null,
         m.status ?? null,
         m.popularity ?? null,
-        m.averageScore ?? null
+        m.averageScore ?? null,
       );
     }
     db.exec('COMMIT;');
@@ -119,13 +123,15 @@ async function apiRequest<T>(query: string, variables?: Record<string, unknown>)
 }
 
 async function fetchBatch(idList: number[], startPage: number, numPages: number) {
-  const pages = Array.from({ length: numPages }, (_, i) =>
-    `p${i}: Page(page: ${startPage + i}, perPage: ${PER_PAGE}) { pageInfo { hasNextPage } media(id_in: $idIn, type: ANIME) { ${MEDIA_FIELDS} } }`
+  const pages = Array.from(
+    { length: numPages },
+    (_, i) =>
+      `p${i}: Page(page: ${startPage + i}, perPage: ${PER_PAGE}) { pageInfo { hasNextPage } media(id_in: $idIn, type: ANIME) { ${MEDIA_FIELDS} } }`,
   );
 
   const data = await apiRequest<Record<string, PageBlock>>(
     `query ($idIn: [Int]) {\n${pages.join('\n')}\n}`,
-    { idIn: idList }
+    { idIn: idList },
   );
 
   const blocks = Object.values(data);
@@ -141,7 +147,9 @@ async function fetchChunk(startId: number): Promise<number> {
   let page = 1;
   let totalSaved = 0;
 
-  console.log(`\n\x1b[32mSyncing IDs ${startId.toLocaleString()} - ${endId.toLocaleString()}\x1b[0m`);
+  console.log(
+    `\n\x1b[32mSyncing IDs ${startId.toLocaleString()} - ${endId.toLocaleString()}\x1b[0m`,
+  );
 
   while (page <= MAX_PAGES_PER_CHUNK) {
     const batchCount = Math.min(PAGES_PER_REQUEST, MAX_PAGES_PER_CHUNK - page + 1);
@@ -152,7 +160,9 @@ async function fetchChunk(startId: number): Promise<number> {
       totalSaved += mediaList.length;
     }
 
-    console.log(`  -> Pages ${page}-${page + batchCount - 1}: +${mediaList.length} anime (Total: ${totalSaved.toLocaleString()})`);
+    console.log(
+      `  -> Pages ${page}-${page + batchCount - 1}: +${mediaList.length} anime (Total: ${totalSaved.toLocaleString()})`,
+    );
     if (!hasMore || !mediaList.length) break;
     page += batchCount;
   }
@@ -164,7 +174,7 @@ async function main() {
   console.log('\x1b[36mConnecting to AniList...\x1b[0m');
 
   const { Page } = await apiRequest<{ Page: { media: [{ id: number }] } }>(
-    `query { Page(page: 1, perPage: 1) { media(type: ANIME, sort: ID_DESC) { id } } }`
+    `query { Page(page: 1, perPage: 1) { media(type: ANIME, sort: ID_DESC) { id } } }`,
   );
   const latestId = Page.media[0].id;
   console.log(`\x1b[36mLatest AniList anime ID: ${latestId.toLocaleString()}\x1b[0m`);

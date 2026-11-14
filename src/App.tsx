@@ -111,7 +111,11 @@ export const App: React.FC = () => {
   // Keyboard navigation: Left Arrow for Backward, Right Arrow for Forward
   useEffect(() => {
     const onKeyDown = (e: KeyboardEvent) => {
-      if (e.target instanceof HTMLInputElement || e.target instanceof HTMLTextAreaElement || e.target instanceof HTMLSelectElement) {
+      if (
+        e.target instanceof HTMLInputElement ||
+        e.target instanceof HTMLTextAreaElement ||
+        e.target instanceof HTMLSelectElement
+      ) {
         return;
       }
       if (e.key === 'ArrowLeft') {
@@ -127,7 +131,7 @@ export const App: React.FC = () => {
   const canGoBackward = currentIndex > 1 && !loading;
   const canGoForward = currentIndex < total && !loading;
 
-  const currentMapping = currentAnime ? mappings[String(currentAnime.id)] ?? null : null;
+  const currentMapping = currentAnime ? (mappings[String(currentAnime.id)] ?? null) : null;
 
   return (
     <div className="min-h-screen pb-12 w-full">
@@ -166,8 +170,9 @@ export const App: React.FC = () => {
 
             {total > 0 && (
               <span className="text-xs text-zinc-400 font-medium hidden sm:inline">
-                Anime <strong className="text-zinc-100 font-mono">{numFmt.format(currentIndex)}</strong> of{' '}
-                <strong className="text-zinc-100 font-mono">{numFmt.format(total)}</strong>
+                Anime{' '}
+                <strong className="text-zinc-100 font-mono">{numFmt.format(currentIndex)}</strong>{' '}
+                of <strong className="text-zinc-100 font-mono">{numFmt.format(total)}</strong>
               </span>
             )}
 
@@ -217,7 +222,8 @@ export const App: React.FC = () => {
 
         {total === 0 && !loading ? (
           <div className="text-center py-16 text-zinc-500 text-sm border border-dashed border-zinc-800 rounded-xl">
-            SQLite database is empty. Run <code className="text-emerald-400 font-mono">npm run scraper</code> to fetch records.
+            SQLite database is empty. Run{' '}
+            <code className="text-emerald-400 font-mono">npm run scraper</code> to fetch records.
           </div>
         ) : currentAnime ? (
           <div className="flex flex-col lg:flex-row gap-8 items-start">
@@ -238,9 +244,7 @@ export const App: React.FC = () => {
             </div>
           </div>
         ) : (
-          <div className="text-center py-16 text-zinc-500 text-sm">
-            Loading anime details...
-          </div>
+          <div className="text-center py-16 text-zinc-500 text-sm">Loading anime details...</div>
         )}
       </main>
     </div>

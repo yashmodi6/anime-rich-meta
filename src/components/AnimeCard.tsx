@@ -67,17 +67,23 @@ export const AnimeCard: React.FC<Props> = ({ anime }) => {
 
         <div className="flex gap-2.5 items-baseline">
           <span className="text-zinc-500 w-16 shrink-0">Romaji</span>
-          <span className="text-zinc-200 leading-snug break-words flex-1 font-medium">{anime.title.romaji || '-'}</span>
+          <span className="text-zinc-200 leading-snug break-words flex-1 font-medium">
+            {anime.title.romaji || '-'}
+          </span>
         </div>
 
         <div className="flex gap-2.5 items-baseline">
           <span className="text-zinc-500 w-16 shrink-0">English</span>
-          <span className="text-zinc-200 leading-snug break-words flex-1">{anime.title.english || '-'}</span>
+          <span className="text-zinc-200 leading-snug break-words flex-1">
+            {anime.title.english || '-'}
+          </span>
         </div>
 
         <div className="flex gap-2.5 items-baseline">
           <span className="text-zinc-500 w-16 shrink-0">Native</span>
-          <span className="text-zinc-200 font-sans leading-snug break-words flex-1">{anime.title.native || '-'}</span>
+          <span className="text-zinc-200 font-sans leading-snug break-words flex-1">
+            {anime.title.native || '-'}
+          </span>
         </div>
 
         {/* Synonyms as pills */}

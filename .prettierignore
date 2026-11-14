@@ -1,0 +1,8 @@
+node_modules
+dist
+dist-ssr
+build
+anime.db*
+mappings.json
+package-lock.json
+.env*

@@ -4,7 +4,8 @@ import { AnimeRecord, TmdbImageNode, TmdbImagesResult, AnimeMapping } from '../t
 const TMDB_IMG_THUMB = 'https://image.tmdb.org/t/p/w500';
 const TMDB_IMG_ORIGINAL = 'https://image.tmdb.org/t/p/original';
 
-const toPath = (val?: string | null) => (val ? val.replace(/^https?:\/\/[^/]+\/t\/p\/[^/]+/, '') : null);
+const toPath = (val?: string | null) =>
+  val ? val.replace(/^https?:\/\/[^/]+\/t\/p\/[^/]+/, '') : null;
 
 const getLangPriority = (lang?: string | null) => {
   if (!lang || lang === 'xx') return 0;
@@ -23,13 +24,15 @@ const LangBadge: React.FC<{ lang?: string | null }> = ({ lang }) => {
   const color = isNoLang
     ? 'bg-emerald-950 text-emerald-300 border-emerald-700'
     : l === 'en'
-    ? 'bg-blue-950 text-blue-300 border-blue-700'
-    : l === 'ja'
-    ? 'bg-purple-950 text-purple-300 border-purple-700'
-    : 'bg-zinc-800 text-zinc-300 border-zinc-700';
+      ? 'bg-blue-950 text-blue-300 border-blue-700'
+      : l === 'ja'
+        ? 'bg-purple-950 text-purple-300 border-purple-700'
+        : 'bg-zinc-800 text-zinc-300 border-zinc-700';
 
   return (
-    <span className={`text-[11px] font-mono font-semibold px-2 py-0.5 rounded border shadow-sm uppercase leading-tight ${color}`}>
+    <span
+      className={`text-[11px] font-mono font-semibold px-2 py-0.5 rounded border shadow-sm uppercase leading-tight ${color}`}
+    >
       {isNoLang ? 'no lang' : lang}
     </span>
   );
@@ -74,7 +77,9 @@ export const TmdbWorkspace: React.FC<Props> = ({ anime, savedMapping, onSave, is
       setSelectedPoster(toPath(savedMapping.poster));
       setSelectedBackdrop(toPath(savedMapping.backdrop));
       setSelectedLogo(toPath(savedMapping.logo));
-      setSelectedLogoWhite(toPath(savedMapping.clearlogoWhite || (savedMapping as any).clearlogo_white));
+      setSelectedLogoWhite(
+        toPath(savedMapping.clearlogoWhite || (savedMapping as any).clearlogo_white),
+      );
     } else {
       setTmdbId('');
       setSelectedPoster(null);
@@ -182,7 +187,9 @@ export const TmdbWorkspace: React.FC<Props> = ({ anime, savedMapping, onSave, is
   const currentLogoWhite = selectedLogoWhite
     ? `${TMDB_IMG_THUMB}${selectedLogoWhite}`
     : savedMapping?.clearlogoWhite || (savedMapping as any)?.clearlogo_white || null;
-  const hasAnyMapped = Boolean(currentPoster || currentBackdrop || currentLogo || currentLogoWhite || savedMapping);
+  const hasAnyMapped = Boolean(
+    currentPoster || currentBackdrop || currentLogo || currentLogoWhite || savedMapping,
+  );
 
   return (
     <div className="bg-zinc-900 border border-zinc-800 rounded-xl p-5 flex flex-col gap-5 shadow-lg w-full">
@@ -205,7 +212,8 @@ export const TmdbWorkspace: React.FC<Props> = ({ anime, savedMapping, onSave, is
         {/* Selected Previews Summary & Save Button */}
         <div className="flex items-center gap-2 text-xs">
           <span className="text-zinc-500 text-[11px] hidden sm:inline">
-            Selected: {selectedPoster ? 'Poster ✓' : '-'} | {selectedBackdrop ? 'Backdrop ✓' : '-'} | {selectedLogo ? 'Logo ✓' : '-'} | {selectedLogoWhite ? 'White Logo ✓' : '-'}
+            Selected: {selectedPoster ? 'Poster ✓' : '-'} | {selectedBackdrop ? 'Backdrop ✓' : '-'}{' '}
+            | {selectedLogo ? 'Logo ✓' : '-'} | {selectedLogoWhite ? 'White Logo ✓' : '-'}
           </span>
           <button
             type="button"
@@ -260,7 +268,9 @@ export const TmdbWorkspace: React.FC<Props> = ({ anime, savedMapping, onSave, is
       {/* Search Candidates Dropdown / Grid */}
       {searchResults.length > 0 && (
         <div className="bg-zinc-950 border border-zinc-800 rounded-lg p-3 space-y-2">
-          <span className="text-xs text-zinc-400 font-medium block">Select matching TMDB title:</span>
+          <span className="text-xs text-zinc-400 font-medium block">
+            Select matching TMDB title:
+          </span>
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2 max-h-48 overflow-y-auto">
             {searchResults.map((r) => (
               <button
@@ -270,7 +280,11 @@ export const TmdbWorkspace: React.FC<Props> = ({ anime, savedMapping, onSave, is
                 className="text-left bg-zinc-900 hover:bg-zinc-800 border border-zinc-800 p-2 rounded flex items-center gap-2 transition cursor-pointer"
               >
                 {r.poster_path ? (
-                  <img src={`${TMDB_IMG_THUMB}${r.poster_path}`} alt="" className="w-8 h-12 object-cover rounded shrink-0" />
+                  <img
+                    src={`${TMDB_IMG_THUMB}${r.poster_path}`}
+                    alt=""
+                    className="w-8 h-12 object-cover rounded shrink-0"
+                  />
                 ) : (
                   <div className="w-8 h-12 bg-zinc-800 rounded shrink-0" />
                 )}
@@ -305,7 +319,14 @@ export const TmdbWorkspace: React.FC<Props> = ({ anime, savedMapping, onSave, is
               <span className="w-2 h-2 rounded-full bg-emerald-500" />
               <span className="font-semibold text-zinc-200">Mapped Assets</span>
               <span className="text-[11px] text-zinc-500">
-                {[currentPoster && 'Poster', currentBackdrop && 'Backdrop', currentLogo && 'Logo', currentLogoWhite && 'White Logo'].filter(Boolean).join(' • ')}
+                {[
+                  currentPoster && 'Poster',
+                  currentBackdrop && 'Backdrop',
+                  currentLogo && 'Logo',
+                  currentLogoWhite && 'White Logo',
+                ]
+                  .filter(Boolean)
+                  .join(' • ')}
               </span>
             </div>
             <span className="text-zinc-400 text-xs font-mono">
@@ -403,16 +424,15 @@ export const TmdbWorkspace: React.FC<Props> = ({ anime, savedMapping, onSave, is
               : 'border-transparent text-zinc-400 hover:text-zinc-200'
           }`}
         >
-          Clearart / Logos ({images.logos.length}) {selectedLogo && '✓'} {selectedLogoWhite && '(White ✓)'}
+          Clearart / Logos ({images.logos.length}) {selectedLogo && '✓'}{' '}
+          {selectedLogoWhite && '(White ✓)'}
         </button>
       </div>
 
       {/* Gallery Grid */}
       <div className="min-h-[380px]">
         {loading ? (
-          <div className="text-center py-20 text-xs text-zinc-500">
-            Loading images from TMDB...
-          </div>
+          <div className="text-center py-20 text-xs text-zinc-500">Loading images from TMDB...</div>
         ) : activeTab === 'posters' ? (
           images.posters.length === 0 ? (
             <div className="text-center py-20 text-xs text-zinc-500">
@@ -433,7 +453,11 @@ export const TmdbWorkspace: React.FC<Props> = ({ anime, savedMapping, onSave, is
                         : 'border-zinc-800 hover:border-zinc-600'
                     }`}
                   >
-                    <img src={`${TMDB_IMG_THUMB}${img.file_path}`} alt="Poster" className="w-full h-full object-cover" />
+                    <img
+                      src={`${TMDB_IMG_THUMB}${img.file_path}`}
+                      alt="Poster"
+                      className="w-full h-full object-cover"
+                    />
                     <div className="absolute top-1.5 right-1.5">
                       {isSelected ? (
                         <span className="bg-indigo-600 text-white rounded-full w-5 h-5 flex items-center justify-center text-[10px] font-bold shadow">
@@ -446,7 +470,9 @@ export const TmdbWorkspace: React.FC<Props> = ({ anime, savedMapping, onSave, is
                       )}
                     </div>
                     <div className="absolute bottom-0 inset-x-0 bg-gradient-to-t from-black/90 via-black/60 to-transparent px-2 py-1.5 text-[11px] text-zinc-300 flex items-center justify-between">
-                      <span className="font-mono">{img.width}×{img.height}</span>
+                      <span className="font-mono">
+                        {img.width}×{img.height}
+                      </span>
                       <LangBadge lang={img.iso_639_1} />
                     </div>
                   </button>
@@ -456,9 +482,7 @@ export const TmdbWorkspace: React.FC<Props> = ({ anime, savedMapping, onSave, is
           )
         ) : activeTab === 'backdrops' ? (
           images.backdrops.length === 0 ? (
-            <div className="text-center py-20 text-xs text-zinc-500">
-              No backgrounds loaded.
-            </div>
+            <div className="text-center py-20 text-xs text-zinc-500">No backgrounds loaded.</div>
           ) : (
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 max-h-[500px] overflow-y-auto p-1">
               {images.backdrops.map((img) => {
@@ -474,7 +498,11 @@ export const TmdbWorkspace: React.FC<Props> = ({ anime, savedMapping, onSave, is
                         : 'border-zinc-800 hover:border-zinc-600'
                     }`}
                   >
-                    <img src={`${TMDB_IMG_THUMB}${img.file_path}`} alt="Backdrop" className="w-full h-full object-cover" />
+                    <img
+                      src={`${TMDB_IMG_THUMB}${img.file_path}`}
+                      alt="Backdrop"
+                      className="w-full h-full object-cover"
+                    />
                     <div className="absolute top-1.5 right-1.5">
                       {isSelected ? (
                         <span className="bg-indigo-600 text-white rounded-full w-5 h-5 flex items-center justify-center text-[10px] font-bold shadow">
@@ -487,7 +515,9 @@ export const TmdbWorkspace: React.FC<Props> = ({ anime, savedMapping, onSave, is
                       )}
                     </div>
                     <div className="absolute bottom-0 inset-x-0 bg-gradient-to-t from-black/90 via-black/60 to-transparent px-2 py-1.5 text-[11px] text-zinc-300 flex items-center justify-between">
-                      <span className="font-mono">{img.width}×{img.height}</span>
+                      <span className="font-mono">
+                        {img.width}×{img.height}
+                      </span>
                       <LangBadge lang={img.iso_639_1} />
                     </div>
                   </button>
@@ -495,160 +525,166 @@ export const TmdbWorkspace: React.FC<Props> = ({ anime, savedMapping, onSave, is
               })}
             </div>
           )
+        ) : images.logos.length === 0 ? (
+          <div className="text-center py-20 text-xs text-zinc-500">No clearart/logos loaded.</div>
         ) : (
-          images.logos.length === 0 ? (
-            <div className="text-center py-20 text-xs text-zinc-500">
-              No clearart/logos loaded.
-            </div>
-          ) : (
-            <div className="space-y-3">
-              {/* Logo Selection Mode Bar */}
-              <div className="flex flex-wrap items-center justify-between gap-2 p-2 bg-zinc-950 border border-zinc-800 rounded-lg text-xs">
-                <div className="flex items-center gap-2">
-                  <span className="text-zinc-400 text-[11px] font-medium">Selecting:</span>
-                  <button
-                    type="button"
-                    onClick={() => setLogoTarget('primary')}
-                    className={`px-3 py-1 rounded text-xs font-semibold transition cursor-pointer flex items-center gap-1.5 ${
-                      logoTarget === 'primary'
-                        ? 'bg-indigo-600 text-white shadow'
-                        : 'bg-zinc-900 text-zinc-400 hover:text-zinc-200 border border-zinc-800'
-                    }`}
-                  >
-                    <span>1. Primary Logo</span>
-                    {selectedLogo && <span className="text-emerald-300 font-bold">✓</span>}
-                  </button>
+          <div className="space-y-3">
+            {/* Logo Selection Mode Bar */}
+            <div className="flex flex-wrap items-center justify-between gap-2 p-2 bg-zinc-950 border border-zinc-800 rounded-lg text-xs">
+              <div className="flex items-center gap-2">
+                <span className="text-zinc-400 text-[11px] font-medium">Selecting:</span>
+                <button
+                  type="button"
+                  onClick={() => setLogoTarget('primary')}
+                  className={`px-3 py-1 rounded text-xs font-semibold transition cursor-pointer flex items-center gap-1.5 ${
+                    logoTarget === 'primary'
+                      ? 'bg-indigo-600 text-white shadow'
+                      : 'bg-zinc-900 text-zinc-400 hover:text-zinc-200 border border-zinc-800'
+                  }`}
+                >
+                  <span>1. Primary Logo</span>
+                  {selectedLogo && <span className="text-emerald-300 font-bold">✓</span>}
+                </button>
 
-                  <button
-                    type="button"
-                    onClick={() => setLogoTarget('white')}
-                    className={`px-3 py-1 rounded text-xs font-semibold transition cursor-pointer flex items-center gap-1.5 ${
-                      logoTarget === 'white'
-                        ? 'bg-zinc-100 text-zinc-950 shadow'
-                        : 'bg-zinc-900 text-zinc-400 hover:text-zinc-200 border border-zinc-800'
-                    }`}
-                  >
-                    <span>2. White Logo (clearlogoWhite)</span>
-                    <span className="text-[10px] opacity-70">(Optional)</span>
-                    {selectedLogoWhite && <span className="text-emerald-500 font-bold">✓</span>}
-                  </button>
-                </div>
-
-                <div className="flex items-center gap-2 text-[11px]">
-                  {selectedLogo && (
-                    <button
-                      type="button"
-                      onClick={() => setSelectedLogo(null)}
-                      className="text-zinc-400 hover:text-red-400 transition cursor-pointer"
-                    >
-                      Clear Primary
-                    </button>
-                  )}
-                  {selectedLogo && selectedLogoWhite && <span className="text-zinc-700">•</span>}
-                  {selectedLogoWhite && (
-                    <button
-                      type="button"
-                      onClick={() => setSelectedLogoWhite(null)}
-                      className="text-zinc-400 hover:text-red-400 transition cursor-pointer"
-                    >
-                      Clear White
-                    </button>
-                  )}
-                </div>
+                <button
+                  type="button"
+                  onClick={() => setLogoTarget('white')}
+                  className={`px-3 py-1 rounded text-xs font-semibold transition cursor-pointer flex items-center gap-1.5 ${
+                    logoTarget === 'white'
+                      ? 'bg-zinc-100 text-zinc-950 shadow'
+                      : 'bg-zinc-900 text-zinc-400 hover:text-zinc-200 border border-zinc-800'
+                  }`}
+                >
+                  <span>2. White Logo (clearlogoWhite)</span>
+                  <span className="text-[10px] opacity-70">(Optional)</span>
+                  {selectedLogoWhite && <span className="text-emerald-500 font-bold">✓</span>}
+                </button>
               </div>
 
-              {/* Logos Grid */}
-              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3 max-h-[500px] overflow-y-auto p-1">
-                {images.logos.map((img) => {
-                  const isPrimary = selectedLogo === img.file_path;
-                  const isWhite = selectedLogoWhite === img.file_path;
-                  const isSelected = isPrimary || isWhite;
+              <div className="flex items-center gap-2 text-[11px]">
+                {selectedLogo && (
+                  <button
+                    type="button"
+                    onClick={() => setSelectedLogo(null)}
+                    className="text-zinc-400 hover:text-red-400 transition cursor-pointer"
+                  >
+                    Clear Primary
+                  </button>
+                )}
+                {selectedLogo && selectedLogoWhite && <span className="text-zinc-700">•</span>}
+                {selectedLogoWhite && (
+                  <button
+                    type="button"
+                    onClick={() => setSelectedLogoWhite(null)}
+                    className="text-zinc-400 hover:text-red-400 transition cursor-pointer"
+                  >
+                    Clear White
+                  </button>
+                )}
+              </div>
+            </div>
 
-                  return (
-                    <button
-                      key={img.file_path}
-                      type="button"
-                      onClick={() => {
-                        if (logoTarget === 'primary') {
-                          setSelectedLogo(isPrimary ? null : img.file_path);
-                        } else {
-                          setSelectedLogoWhite(isWhite ? null : img.file_path);
-                        }
-                      }}
-                      className={`group relative aspect-video rounded-lg p-2 flex items-center justify-center border-2 transition cursor-pointer bg-zinc-950/90 ${
-                        isPrimary && isWhite
-                          ? 'border-indigo-400 ring-2 ring-indigo-400/50'
-                          : isPrimary
+            {/* Logos Grid */}
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3 max-h-[500px] overflow-y-auto p-1">
+              {images.logos.map((img) => {
+                const isPrimary = selectedLogo === img.file_path;
+                const isWhite = selectedLogoWhite === img.file_path;
+                const isSelected = isPrimary || isWhite;
+
+                return (
+                  <button
+                    key={img.file_path}
+                    type="button"
+                    onClick={() => {
+                      if (logoTarget === 'primary') {
+                        setSelectedLogo(isPrimary ? null : img.file_path);
+                      } else {
+                        setSelectedLogoWhite(isWhite ? null : img.file_path);
+                      }
+                    }}
+                    className={`group relative aspect-video rounded-lg p-2 flex items-center justify-center border-2 transition cursor-pointer bg-zinc-950/90 ${
+                      isPrimary && isWhite
+                        ? 'border-indigo-400 ring-2 ring-indigo-400/50'
+                        : isPrimary
                           ? 'border-indigo-500 ring-2 ring-indigo-500/50'
                           : isWhite
-                          ? 'border-zinc-200 ring-2 ring-white/40'
-                          : 'border-zinc-800 hover:border-zinc-600'
-                      }`}
-                    >
-                      <img src={`${TMDB_IMG_THUMB}${img.file_path}`} alt="Logo" className="max-h-full max-w-full object-contain" />
+                            ? 'border-zinc-200 ring-2 ring-white/40'
+                            : 'border-zinc-800 hover:border-zinc-600'
+                    }`}
+                  >
+                    <img
+                      src={`${TMDB_IMG_THUMB}${img.file_path}`}
+                      alt="Logo"
+                      className="max-h-full max-w-full object-contain"
+                    />
 
-                      {/* Top-Right Badges */}
-                      <div className="absolute top-1.5 right-1.5 flex flex-col gap-1 items-end">
-                        {isPrimary && (
-                          <span className="bg-indigo-600 text-white rounded text-[10px] font-bold px-1.5 py-0.5 shadow">
-                            Primary ✓
-                          </span>
-                        )}
-                        {isWhite && (
-                          <span className="bg-zinc-100 text-zinc-950 rounded text-[10px] font-bold px-1.5 py-0.5 shadow">
-                            White ✓
-                          </span>
-                        )}
-                        {!isSelected && (
-                          <span className="bg-zinc-900/80 text-zinc-400 opacity-0 group-hover:opacity-100 rounded text-[9px] px-1 py-0.5">
-                            Set {logoTarget === 'primary' ? 'Primary' : 'White'}
-                          </span>
-                        )}
-                      </div>
-
-                      {/* Hover direct action buttons in top-left */}
-                      <div className="absolute top-1.5 left-1.5 flex gap-1 opacity-0 group-hover:opacity-100 transition z-10">
-                        <span
-                          role="button"
-                          tabIndex={0}
-                          title="Toggle Primary Logo"
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            setSelectedLogo(isPrimary ? null : img.file_path);
-                          }}
-                          className={`text-[9px] px-1.5 py-0.5 rounded font-bold cursor-pointer transition ${
-                            isPrimary ? 'bg-indigo-600 text-white' : 'bg-zinc-900/90 text-zinc-300 hover:bg-zinc-800 border border-zinc-700'
-                          }`}
-                        >
-                          Pri
+                    {/* Top-Right Badges */}
+                    <div className="absolute top-1.5 right-1.5 flex flex-col gap-1 items-end">
+                      {isPrimary && (
+                        <span className="bg-indigo-600 text-white rounded text-[10px] font-bold px-1.5 py-0.5 shadow">
+                          Primary ✓
                         </span>
-                        <span
-                          role="button"
-                          tabIndex={0}
-                          title="Toggle White Logo (clearlogoWhite)"
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            setSelectedLogoWhite(isWhite ? null : img.file_path);
-                          }}
-                          className={`text-[9px] px-1.5 py-0.5 rounded font-bold cursor-pointer transition ${
-                            isWhite ? 'bg-zinc-100 text-zinc-950' : 'bg-zinc-900/90 text-zinc-300 hover:bg-zinc-800 border border-zinc-700'
-                          }`}
-                        >
-                          White
+                      )}
+                      {isWhite && (
+                        <span className="bg-zinc-100 text-zinc-950 rounded text-[10px] font-bold px-1.5 py-0.5 shadow">
+                          White ✓
                         </span>
-                      </div>
+                      )}
+                      {!isSelected && (
+                        <span className="bg-zinc-900/80 text-zinc-400 opacity-0 group-hover:opacity-100 rounded text-[9px] px-1 py-0.5">
+                          Set {logoTarget === 'primary' ? 'Primary' : 'White'}
+                        </span>
+                      )}
+                    </div>
 
-                      {/* Bottom Info Bar */}
-                      <div className="absolute bottom-1.5 inset-x-0 px-2.5 flex items-center justify-between text-[11px] text-zinc-400">
-                        <span className="font-mono">{img.width}×{img.height}</span>
-                        <LangBadge lang={img.iso_639_1} />
-                      </div>
-                    </button>
-                  );
-                })}
-              </div>
+                    {/* Hover direct action buttons in top-left */}
+                    <div className="absolute top-1.5 left-1.5 flex gap-1 opacity-0 group-hover:opacity-100 transition z-10">
+                      <span
+                        role="button"
+                        tabIndex={0}
+                        title="Toggle Primary Logo"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setSelectedLogo(isPrimary ? null : img.file_path);
+                        }}
+                        className={`text-[9px] px-1.5 py-0.5 rounded font-bold cursor-pointer transition ${
+                          isPrimary
+                            ? 'bg-indigo-600 text-white'
+                            : 'bg-zinc-900/90 text-zinc-300 hover:bg-zinc-800 border border-zinc-700'
+                        }`}
+                      >
+                        Pri
+                      </span>
+                      <span
+                        role="button"
+                        tabIndex={0}
+                        title="Toggle White Logo (clearlogoWhite)"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setSelectedLogoWhite(isWhite ? null : img.file_path);
+                        }}
+                        className={`text-[9px] px-1.5 py-0.5 rounded font-bold cursor-pointer transition ${
+                          isWhite
+                            ? 'bg-zinc-100 text-zinc-950'
+                            : 'bg-zinc-900/90 text-zinc-300 hover:bg-zinc-800 border border-zinc-700'
+                        }`}
+                      >
+                        White
+                      </span>
+                    </div>
+
+                    {/* Bottom Info Bar */}
+                    <div className="absolute bottom-1.5 inset-x-0 px-2.5 flex items-center justify-between text-[11px] text-zinc-400">
+                      <span className="font-mono">
+                        {img.width}×{img.height}
+                      </span>
+                      <LangBadge lang={img.iso_639_1} />
+                    </div>
+                  </button>
+                );
+              })}
             </div>
-          )
+          </div>
         )}
       </div>
     </div>

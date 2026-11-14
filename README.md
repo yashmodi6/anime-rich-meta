@@ -15,19 +15,23 @@ To facilitate the development of my otaku app by enriching AniList entries with 
 ## Setup
 
 1. Install dependencies:
+
    ```bash
    npm install
    ```
 
 2. Add your TMDB API read access token in `.env.local`:
+
    ```env
    TMDB_READ_ACCESS_TOKEN=your_v4_token_here
    ```
 
 3. Fetch anime metadata from AniList:
+
    ```bash
    npm run scraper
    ```
+
    This creates and populates `anime.db`.
 
 4. Start the mapping interface:

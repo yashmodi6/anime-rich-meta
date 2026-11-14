@@ -25,7 +25,12 @@ const getMappings = (): Record<string, any> => {
 
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd(), '');
-  const tmdbToken = (env.TMDB_READ_ACCESS_TOKEN || env.TMDB_ACCESS_TOKEN || env.TMDB_TOKEN || '').trim();
+  const tmdbToken = (
+    env.TMDB_READ_ACCESS_TOKEN ||
+    env.TMDB_ACCESS_TOKEN ||
+    env.TMDB_TOKEN ||
+    ''
+  ).trim();
 
   return {
     plugins: [
@@ -56,14 +61,21 @@ export default defineConfig(({ mode }) => {
           server.middlewares.use('/api/anime', (req, res) => {
             const url = new URL(req.url || '', `http://${req.headers.host}`);
             const page = Math.max(1, parseInt(url.searchParams.get('page') || '1', 10));
-            const limit = Math.min(100, Math.max(1, parseInt(url.searchParams.get('limit') || '1', 10)));
+            const limit = Math.min(
+              100,
+              Math.max(1, parseInt(url.searchParams.get('limit') || '1', 10)),
+            );
             const offset = (page - 1) * limit;
 
-            const countResult = db.prepare('SELECT COUNT(*) as count FROM anilist').get() as { count: number };
+            const countResult = db.prepare('SELECT COUNT(*) as count FROM anilist').get() as {
+              count: number;
+            };
             const total = countResult?.count || 0;
             const sort = url.searchParams.get('sort') || 'popularity';
             const orderBy = sort === 'id' ? 'id ASC' : 'popularity DESC NULLS LAST, id ASC';
-            const rows = db.prepare(`SELECT * FROM anilist ORDER BY ${orderBy} LIMIT ? OFFSET ?`).all(limit, offset) as any[];
+            const rows = db
+              .prepare(`SELECT * FROM anilist ORDER BY ${orderBy} LIMIT ? OFFSET ?`)
+              .all(limit, offset) as any[];
 
             const items = rows.map((r) => ({
               id: r.id,
@@ -99,7 +111,9 @@ export default defineConfig(({ mode }) => {
 
             if (req.method === 'POST') {
               let body = '';
-              req.on('data', (chunk) => { body += chunk; });
+              req.on('data', (chunk) => {
+                body += chunk;
+              });
               req.on('end', () => {
                 const { anilist_id, mapping } = JSON.parse(body || '{}');
                 if (!anilist_id || !mapping) {
@@ -121,7 +135,9 @@ export default defineConfig(({ mode }) => {
           // TMDB Images Proxy (v4 Read Access Token Bearer Auth)
           server.middlewares.use('/api/tmdb/images', async (req, res) => {
             if (!tmdbToken) {
-              return sendJson(res, 500, { error: 'TMDB_READ_ACCESS_TOKEN is not set. Please add it to your .env.local file.' });
+              return sendJson(res, 500, {
+                error: 'TMDB_READ_ACCESS_TOKEN is not set. Please add it to your .env.local file.',
+              });
             }
 
             const url = new URL(req.url || '', `http://${req.headers.host}`);
@@ -142,7 +158,9 @@ export default defineConfig(({ mode }) => {
             });
 
             if (!tmdbRes.ok) {
-              return sendJson(res, tmdbRes.status, { error: `TMDB error ${tmdbRes.status}: ${await tmdbRes.text()}` });
+              return sendJson(res, tmdbRes.status, {
+                error: `TMDB error ${tmdbRes.status}: ${await tmdbRes.text()}`,
+              });
             }
 
             const data = await tmdbRes.json();
@@ -169,7 +187,9 @@ export default defineConfig(({ mode }) => {
           // TMDB Search Proxy (v4 Read Access Token Bearer Auth)
           server.middlewares.use('/api/tmdb/search', async (req, res) => {
             if (!tmdbToken) {
-              return sendJson(res, 500, { error: 'TMDB_READ_ACCESS_TOKEN is not set. Please add it to your .env.local file.' });
+              return sendJson(res, 500, {
+                error: 'TMDB_READ_ACCESS_TOKEN is not set. Please add it to your .env.local file.',
+              });
             }
 
             const url = new URL(req.url || '', `http://${req.headers.host}`);
